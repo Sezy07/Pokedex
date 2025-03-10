@@ -52,3 +52,4 @@ public class TablePanel extends JPanel {
         return table;
     }
 }
+
