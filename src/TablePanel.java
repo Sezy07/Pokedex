@@ -10,10 +10,10 @@ public class TablePanel extends JPanel {
     public TablePanel(List<DataModel> dataItems) {
         setLayout(new BorderLayout());
 
-        // Define columns for the table, now including 'ID' and 'Name'
+        // Define columns for the table
         String[] columns = {
                 "ID", "Name", "Height", "Weight", "HP", "Attack", "Defense", "Special Attack",
-                "Special Defense", "Speed", "Type", "Evo Set"
+                "Special Defense", "Speed", "Primary Type", "Secondary Type", "Evo Set"
         };
 
         // Create the table model with the columns
@@ -23,8 +23,8 @@ public class TablePanel extends JPanel {
         // Populate the table with data from the list of DataModels
         for (DataModel item : dataItems) {
             model.addRow(new Object[]{
-                    item.getId(),          // ID
-                    item.getName(),        // Name
+                    item.getId(),
+                    item.getName(),
                     item.getHeight(),
                     item.getWeight(),
                     item.getHp(),
@@ -33,14 +33,20 @@ public class TablePanel extends JPanel {
                     item.getS_attack(),
                     item.getS_defense(),
                     item.getSpeed(),
-                    item.getType(),
+                    item.getPrimaryType(),  // Primary Type
+                    item.getSecondaryType().isEmpty() ? "" : item.getSecondaryType(),  // Secondary Type (empty if not available)
                     item.getEvo_set()
             });
         }
 
-        // Adjust the width of the 'Name' column
-        TableColumn nameColumn = table.getColumnModel().getColumn(1);  // Index 1 is for the 'Name' column
-        nameColumn.setPreferredWidth(150);  // Set a preferred width for the 'Name' column (you can adjust the value)
+        // Adjust column widths
+        TableColumn nameColumn = table.getColumnModel().getColumn(1);
+        nameColumn.setPreferredWidth(150);  // Set a preferred width for the 'Name' column
+
+        TableColumn primaryTypeColumn = table.getColumnModel().getColumn(10);
+        primaryTypeColumn.setPreferredWidth(120);  // Adjust width for Primary Type column
+        TableColumn secondaryTypeColumn = table.getColumnModel().getColumn(11);
+        secondaryTypeColumn.setPreferredWidth(120);  // Adjust width for Secondary Type column
 
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(table);
@@ -52,4 +58,5 @@ public class TablePanel extends JPanel {
         return table;
     }
 }
+
 

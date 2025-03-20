@@ -15,56 +15,45 @@ public class DataLoader {
         while ((line = reader.readLine()) != null) {
             String[] fields = line.split(",");
 
-            // Ensure that we have enough fields (you can adjust based on your CSV)
-            if (fields.length < 11) {
-                continue;
+            // Ensure that we have enough fields (at least 12 for the stats and types)
+            if (fields.length < 12) {
+                continue;  // Skip rows that don't have enough columns
             }
 
-            // Parse the fields to try and get the types (WIP, only can read one as of now)
-            int id = parseInteger(fields[0].replace("\"", "").trim());  // ID field
-            String name = fields[1].replace("\"", "").trim();  // Name field
-            int height = parseInteger(fields[2].replace("\"", "").trim());
-            int weight = parseInteger(fields[3].replace("\"", "").trim());
-            int hp = parseInteger(fields[4].replace("\"", "").trim());
-            int attack = parseInteger(fields[5].replace("\"", "").trim());
-            int defense = parseInteger(fields[6].replace("\"", "").trim());
-            int s_attack = parseInteger(fields[7].replace("\"", "").trim());
-            int s_defense = parseInteger(fields[8].replace("\"", "").trim());
-            int speed = parseInteger(fields[9].replace("\"", "").trim());
-            String type = fields[10].replace("\"", "").replace("{", "").replace("}", "").trim();  // Clean up the 'type' field
-            int evo_set = parseInteger(fields[11].replace("\"", "").trim());
+            // Parse only the numeric fields
+            int id = parseInteger(fields[0].trim());
+            String name = fields[1].trim();
+            int height = parseInteger(fields[2].trim());
+            int weight = parseInteger(fields[3].trim());
+            int hp = parseInteger(fields[4].trim());
+            int attack = parseInteger(fields[5].trim());
+            int defense = parseInteger(fields[6].trim());
+            int s_attack = parseInteger(fields[7].trim());
+            int s_defense = parseInteger(fields[8].trim());
+            int speed = parseInteger(fields[9].trim());
+
+            // Handle the type fields, split into primary and secondary
+            String primaryType = fields[10].trim();
+            // Check for "N/A" and treat it as an empty string for secondary type
+            String secondaryType = fields[11].trim().equals("N/A") ? "" : fields[11].trim();
+
+            // Parse evo_set (evolution set should always be the last field, if present)
+            int evo_set = parseInteger(fields[fields.length - 1].trim());
 
             // Create a new DataModel object and add it to the list
-            dataItems.add(new DataModel(id, name, height, weight, hp, attack, defense, s_attack, s_defense, speed, type, evo_set));
+            dataItems.add(new DataModel(id, name, height, weight, hp, attack, defense, s_attack, s_defense, speed, primaryType, secondaryType, evo_set));
         }
+
         reader.close();
         return dataItems;
     }
 
-    // Helper method to safely parse integers, handling invalid input
+    // Helper method to safely parse integers
     private int parseInteger(String value) {
         try {
-            // Attempt to parse the value into an integer
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            // If parsing fails, return a default value (e.g., 0)
-            System.out.println("Invalid number format for value: '" + value + "', using default value 0.");
-            return 0;  // Return a default value in case of error
+            return 0;  // Default value if not a valid number
         }
-    }
-
-    // Method to print the details of an item at a specific index
-    public void printItemDetails(List<DataModel> dataItems, int index) {
-        if (index < dataItems.size()) {
-            System.out.println("Item at index " + index + ": " + dataItems.get(index).toString());
-        } else {
-            System.out.println("Index out of bounds.");
-        }
-    }
-
-    // Method to print the total number of entries
-    public void printTotalEntries(List<DataModel> dataItems) {
-        System.out.println("Total number of entries: " + dataItems.size());
     }
 }
-

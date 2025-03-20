@@ -9,12 +9,13 @@ public class DataModel {
     private int s_attack;
     private int s_defense;
     private int speed;
-    private String type;
+    private String primaryType;  // Primary type of Pokémon
+    private String secondaryType;  // Secondary type of Pokémon (if any)
     private int evo_set;
 
-    // Constructors
+    // Constructor
     public DataModel(int id, String name, int height, int weight, int hp, int attack, int defense, int s_attack,
-                     int s_defense, int speed, String type, int evo_set) {
+                     int s_defense, int speed, String primaryType, String secondaryType, int evo_set) {
         this.id = id;
         this.name = name;
         this.height = height;
@@ -25,11 +26,20 @@ public class DataModel {
         this.s_attack = s_attack;
         this.s_defense = s_defense;
         this.speed = speed;
-        this.type = type;
+        this.primaryType = primaryType;
+        this.secondaryType = secondaryType;
         this.evo_set = evo_set;
     }
 
-    // Getter methods for all fields
+    // Getters for all fields
+    public String getPrimaryType() {
+        return primaryType;
+    }
+
+    public String getSecondaryType() {
+        return secondaryType;
+    }
+
     public int getId() {
         return id;
     }
@@ -70,12 +80,9 @@ public class DataModel {
         return speed;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public int getEvo_set() {
         return evo_set;
     }
 }
+
 
