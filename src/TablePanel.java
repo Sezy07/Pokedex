@@ -31,7 +31,7 @@ public class TablePanel extends JPanel {
         table = new JTable(model);
         updateTableData(filteredData);
 
-        // Enable column sorting by default (JTable handles this automatically)
+        // Enable column sorting by default
         table.setAutoCreateRowSorter(true);
         sorter = new TableRowSorter<>(model);
         table.setRowSorter(sorter);
@@ -104,23 +104,33 @@ public class TablePanel extends JPanel {
         table.revalidate(); // Ensure updates are reflected
     }
 
-    // Method to apply filters
+    // Method to apply filters using Strategy Pattern
     private void applyFilters(JCheckBox grassFilter, JCheckBox fireFilter, JCheckBox waterFilter) {
+        List<FilterStrategy> strategies = new ArrayList<>();
+        if (grassFilter.isSelected()) {
+            strategies.add(new GrassFilter());
+        }
+        if (fireFilter.isSelected()) {
+            strategies.add(new FireFilter());
+        }
+        if (waterFilter.isSelected()) {
+            strategies.add(new WaterFilter());
+        }
+
         filteredData = new ArrayList<>();
-        boolean noFiltersSelected = !grassFilter.isSelected() && !fireFilter.isSelected() && !waterFilter.isSelected();
+        boolean noFiltersSelected = strategies.isEmpty();
 
         // Iterate over original data and apply filters
         for (DataModel item : originalData) {
-            String primaryType = item.getPrimaryType().trim().toLowerCase();
-            String secondaryType = item.getSecondaryType().trim().toLowerCase();
-
-            boolean matchesGrass = grassFilter.isSelected() && (primaryType.equals("grass") || secondaryType.equals("grass"));
-            boolean matchesFire = fireFilter.isSelected() && (primaryType.equals("fire") || secondaryType.equals("fire"));
-            boolean matchesWater = waterFilter.isSelected() && (primaryType.equals("water") || secondaryType.equals("water"));
-
-            // If no filters are selected, show all data
-            if (noFiltersSelected || matchesGrass || matchesFire || matchesWater) {
-                filteredData.add(item);
+            if (noFiltersSelected) {
+                filteredData.add(item); // No filters selected, add all
+            } else {
+                for (FilterStrategy strategy : strategies) {
+                    if (strategy.matches(item)) {
+                        filteredData.add(item);
+                        break;
+                    }
+                }
             }
         }
 
