@@ -35,4 +35,4 @@
                 StatsPanel statsPanel = (StatsPanel) PanelFactory.createPanel("stats", dataItems);
                 PokemonChartPanel chartPanel = (PokemonChartPanel) PanelFactory.createPanel("chart", dataItems);
 
-###### Link to the Repository: https://github.com/Sezy07/Pokedex
+###### Link to the Repository: https://github.com/Sezy07/Pokedex     
