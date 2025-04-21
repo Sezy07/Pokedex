@@ -10,11 +10,11 @@ public class MainApp extends JFrame {
         setSize(1000, 600);  // Adjust the size for the larger chart
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Create instances of the panels
-        TablePanel tablePanel = new TablePanel(dataItems);
-        DetailPanel detailPanel = new DetailPanel();
-        StatsPanel statsPanel = new StatsPanel(dataItems);
-        PokemonChartPanel chartPanel = new PokemonChartPanel(dataItems);  // Use Radar Chart Panel
+        // Create instances of the panels using the PanelFactory
+        TablePanel tablePanel = (TablePanel) PanelFactory.createPanel("table", dataItems);
+        DetailPanel detailPanel = (DetailPanel) PanelFactory.createPanel("detail", dataItems);
+        StatsPanel statsPanel = (StatsPanel) PanelFactory.createPanel("stats", dataItems);
+        PokemonChartPanel chartPanel = (PokemonChartPanel) PanelFactory.createPanel("chart", dataItems);
 
         // Create the split pane to display the table and detail panel
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tablePanel, detailPanel);
@@ -57,5 +57,6 @@ public class MainApp extends JFrame {
         }
     }
 }
+
 
 
